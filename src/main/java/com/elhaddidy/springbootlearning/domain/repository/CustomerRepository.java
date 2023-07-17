@@ -1,23 +1,16 @@
 package com.elhaddidy.springbootlearning.domain.repository;
 
+import com.elhaddidy.springbootlearning.data.dao.CustomerDAO;
 import com.elhaddidy.springbootlearning.domain.model.Customer;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 
-@Component
-public interface CustomerRepository {
+@Repository
+public interface CustomerRepository extends JpaRepository<CustomerDAO,Integer> {
 
-    List<Customer> findAll();
-
-    void save(Customer customer);
-
-    void saveAll(List<Customer> customers);
-
-
-    void deleteById(Integer id);
-
-    Customer getReferenceById(Integer id);
+    List<Customer> findByName(String name);
 
 }

@@ -38,6 +38,12 @@ public class CustomerController {
     @PostMapping
     public void addCustomer(@RequestBody Customer customer){
         customerService.addCustomer(customer);
+
+/**
+ * TODO: check that customer does not exist and handle accordingly
+ *       customer must be 18+
+ *
+ */
     }
 
     @PostMapping("list")
