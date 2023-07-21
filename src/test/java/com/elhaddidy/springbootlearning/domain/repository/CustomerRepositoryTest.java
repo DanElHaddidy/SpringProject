@@ -1,6 +1,7 @@
 package com.elhaddidy.springbootlearning.domain.repository;
 
 
+import com.elhaddidy.springbootlearning.data.dao.CustomerDAO;
 import com.elhaddidy.springbootlearning.data.mappers.CustomerToCustomerDAO;
 import com.elhaddidy.springbootlearning.domain.model.Customer;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +20,7 @@ public class CustomerRepositoryTest {
     @Autowired
     private CustomerRepository customerRepository;
 
-    private CustomerToCustomerDAO customerToCustomerDAO;
+    CustomerToCustomerDAO customerToCustomerDAO;
     Customer customer;
 
     @BeforeEach
@@ -37,24 +38,29 @@ public class CustomerRepositoryTest {
         customerRepository.deleteById(1);
     }
 
-    //Test case success
-    @Test
-    void testFindByName_Found() {
-        List<Customer> customerList = customerRepository.findByName("Karel");
-
-
-        assertThat(customerList.get(0).getId()).isEqualTo(1);
-        assertThat(customerList.get(0).getName()).isEqualTo("Karel");
-
-    }
-
-    //Test case failure
 
     @Test
-    void testFindByName_NotFound() {
-        List<Customer> customerList = customerRepository.findByName("Honza");
-        assertThat(customerList.isEmpty()).isTrue();
+    void existsCustomerDAOById_est(){
+        List<CustomerDAO> list = customerRepository.findAll();
 
+        assertThat(customerRepository.existsCustomerDAOById(list.get(0).getId())).isTrue();
+        assertThat(customerRepository.existsCustomerDAOById(-5)).isFalse();
     }
+
+
+    @Test
+    void existsCustomerDAOByName_test(){
+        assertThat(customerRepository.existsCustomerDAOByName("Karel")).isTrue();
+        assertThat(customerRepository.existsCustomerDAOByName("Peter")).isFalse();
+    }
+
+
+    @Test
+    void existsCustomerDAOByEmail_test(){
+       assertThat(customerRepository.existsCustomerDAOByEmail("karel@gmail.com")).isTrue();
+       assertThat(customerRepository.existsCustomerDAOByEmail("petr@gmail.com")).isFalse();
+    }
+
+
 
 }
