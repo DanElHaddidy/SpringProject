@@ -22,6 +22,6 @@ All CRUD operations are done with the help of JPA premade methods + few custome 
 All 3 layer are unit tested with the help of JUNIT 5, Mockito and more.
 Controller layer unit is tested by sending requests and checking if the responses are correct. Using Postman and Unit testing.
 Service layer is mainly chcking if an appropriate exceptions are thrown when expected.
-Model layer is checking if custome made methods are working as expected. Those operations are checked on a H2 Database as opposed actual DB which is using PostgreSQL because H2 is swift.
+Model layer is checking if custome made methods are working as expected. Those operations are checked on a H2 Database as opposed to actual DB which is using PostgreSQL because H2 is swift.
 
 **Technologies:** JAVA, Spring Boot, Docker, Postman, PostgreSQL, JPA, H2 Database, Maven, Gson, JUNIT 5, Mockito
