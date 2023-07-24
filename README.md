@@ -3,7 +3,7 @@
 Simple REST application with Spring Boot + Maven. 
 
 This application sole purpose is to process REST Http requests and manage underlying customers list that is stored in DB.
-Body of the request (resource) is in application/JSON format. Which is in represented in app as a simple POJO class named Customer with 3 fields (name, email, age).
+Body of the request (resource) is in application/JSON format. Which is represented in app as a simple POJO class named Customer with 3 fields (name, email, age).
 
 ### Resource:
 ```
