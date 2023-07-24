@@ -6,7 +6,6 @@ import com.elhaddidy.springbootlearning.domain.repository.CustomerRepository;
 import com.elhaddidy.springbootlearning.exception.CustomerIsUnderAgeException;
 import com.elhaddidy.springbootlearning.exception.CustomerNotFoundException;
 import com.elhaddidy.springbootlearning.exception.DuplicateResourceException;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,17 +51,19 @@ class CustomerServiceTest {
 
     @Test
     void getCustomer_test() {
+        when(customerRepository.existsCustomerDAOById(1)).thenReturn(true);
         when(customerRepository.getReferenceById(1)).thenReturn(customerDAO);
         assertThat(customerService.getCustomer(1)).isEqualTo(customer);
     }
 
     @Test
     void getCustomer_test_CustomerNotFoundException() {
-        when(customerRepository.getReferenceById(-1)).thenThrow(new EntityNotFoundException("E"));
+
+        when(customerRepository.existsCustomerDAOById(-1)).thenReturn(false);
         CustomerNotFoundException e = assertThrows(CustomerNotFoundException.class, () -> {
             customerService.getCustomer(-1);
         });
-        assertThat(e).hasMessage("E");
+        assertThat(e).hasMessage("There is not customer with id -1");
     }
 
     @Test
@@ -122,8 +123,8 @@ class CustomerServiceTest {
 
     @Test
     void deleteCustomer_test_CustomerNotFoundException() {
-        when(customerRepository.getReferenceById(-1)).thenThrow(new EntityNotFoundException());
 
+        when(customerRepository.existsCustomerDAOById(-1)).thenReturn(false);
         CustomerNotFoundException e = assertThrows(CustomerNotFoundException.class, () -> {
             customerService.deleteCustomer(-1);
         });
@@ -133,7 +134,7 @@ class CustomerServiceTest {
     @Test
     void updateCustomerEmail_test_CustomerNotFoundException() {
 
-        when(customerRepository.existsCustomerDAOById(-1)).thenReturn(true);
+        when(customerRepository.existsCustomerDAOById(-1)).thenReturn(false);
 
         CustomerNotFoundException e = assertThrows(CustomerNotFoundException.class, () -> {
             customerService.updateCustomerEmail(-1, "pavel@gmail.com");
@@ -143,11 +144,11 @@ class CustomerServiceTest {
 
     @Test
     void updateCustomerEmail_test_DuplicateResourceException() {
-
+        when(customerRepository.existsCustomerDAOById(1)).thenReturn(true);
         when(customerRepository.existsCustomerDAOByEmail("pavel@gmail.com")).thenReturn(true);
 
         DuplicateResourceException e = assertThrows(DuplicateResourceException.class, () -> {
-            customerService.updateCustomerEmail(-1, "pavel@gmail.com");
+            customerService.updateCustomerEmail(1, "pavel@gmail.com");
         });
         assertThat(e).hasMessage("Email pavel@gmail.com is already taken");
     }
@@ -155,7 +156,7 @@ class CustomerServiceTest {
     @Test
     void updateCustomer_test_CustomerNotFoundException() {
 
-        when(customerRepository.existsCustomerDAOById(1)).thenReturn(true);
+        when(customerRepository.existsCustomerDAOById(1)).thenReturn(false);
 
         CustomerNotFoundException e = assertThrows(CustomerNotFoundException.class, () -> {
             customerService.updateCustomer(customer);
@@ -165,7 +166,7 @@ class CustomerServiceTest {
 
     @Test
     void updateCustomer_test_DuplicateResourceException1() {
-
+        when(customerRepository.existsCustomerDAOById(1)).thenReturn(true);
         when(customerRepository.existsCustomerDAOByName("Karel")).thenReturn(true);
 
         DuplicateResourceException e = assertThrows(DuplicateResourceException.class, () -> {
@@ -176,7 +177,8 @@ class CustomerServiceTest {
 
     @Test
     void updateCustomer_test_DuplicateResourceException2() {
-
+        when(customerRepository.existsCustomerDAOById(1)).thenReturn(true);
+        when(customerRepository.existsCustomerDAOByName("Karel")).thenReturn(false);
         when(customerRepository.existsCustomerDAOByEmail("karel@gmail.com")).thenReturn(true);
 
         DuplicateResourceException e = assertThrows(DuplicateResourceException.class, () -> {
@@ -187,6 +189,10 @@ class CustomerServiceTest {
 
     @Test
     void updateCustomer_test_CustomerIsUnderAgeException() {
+        when(customerRepository.existsCustomerDAOById(1)).thenReturn(true);
+        when(customerRepository.existsCustomerDAOByName("Karel")).thenReturn(false);
+        when(customerRepository.existsCustomerDAOByEmail("karel@gmail.com")).thenReturn(false);
+
         customer.setAge(5);
         CustomerIsUnderAgeException e = assertThrows(CustomerIsUnderAgeException.class, () -> {
             customerService.updateCustomer(customer);

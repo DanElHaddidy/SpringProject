@@ -53,9 +53,9 @@ public class CustomerService {
     public Customer getCustomer(Integer id) {
         logger.info("Getting customer form DB by id: " + id);
 
-        if(customerRepository.existsCustomerDAOById(id)) {
+        if(!customerRepository.existsCustomerDAOById(id)) {
             throw new CustomerNotFoundException(
-                    "There is not customer with %d id to be deleted".formatted(id)
+                    "There is not customer with id %d".formatted(id)
             );
         }
 
@@ -133,7 +133,7 @@ public class CustomerService {
     public void deleteCustomer(Integer id) {
         logger.info("Deleting customer with id: " + id);
 
-        if(customerRepository.existsCustomerDAOById(id)) {
+        if(!customerRepository.existsCustomerDAOById(id)) {
             throw new CustomerNotFoundException(
                     "There is not customer with %d id to be deleted".formatted(id)
             );
@@ -153,7 +153,7 @@ public class CustomerService {
     public void updateCustomerEmail(Integer id, String email) {
         logger.info("Updating customer with id: %d email: %s".formatted(id, email));
 
-        if (customerRepository.existsCustomerDAOById(id)) {
+        if (!customerRepository.existsCustomerDAOById(id)) {
             throw new CustomerNotFoundException(
                     "There is not customer with %d id to be updated".formatted(id)
             );
@@ -182,7 +182,7 @@ public class CustomerService {
     public void updateCustomer(Customer customer) {
         logger.info("Updating customer with name " + customer.getName());
 
-        if (customerRepository.existsCustomerDAOById(customer.getId())) {
+        if (!customerRepository.existsCustomerDAOById(customer.getId())) {
             throw new CustomerNotFoundException(
                     "There is not customer with %d id to be updated".formatted(customer.getId())
             );
