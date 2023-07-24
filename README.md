@@ -23,7 +23,7 @@ Comunication between layers
 * **Service Layer:** This layer is responsibel for business logic. Mainly checking for duplicity in DB. 
 To prevent having two customers with same name/email. And to ensure customer is above the age of 18.  
 
-* **Model layer:** This layer is using PostgreSQL (object-relational database system) for its DB that is running in Docker container.
+* **Model layer:** This layer is using PostgreSQL for its DB that is running in Docker container.
 All CRUD operations are done with the help of JPA premade methods + few custome made ones.
 
 ## Testing: 
